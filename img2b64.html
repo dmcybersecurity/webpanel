@@ -9,6 +9,10 @@
     <input type="file" id="image-upload" accept="image/*">
     <br>
     <button onclick="convertImage()">Convert to Base64</button>
+    <br>
+    <label for="image-url">Enter Image URL:</label>
+    <input type="text" id="image-url">
+    <button onclick="convertImageUrl()">Convert to Base64</button>
     <br><br>
     <textarea id="base64-code" rows="10" cols="50"></textarea>
     <br>
@@ -32,6 +36,24 @@
         reader.onerror = function (error) {
           console.log('Error: ', error);
         };
+      }
+      
+      function convertImageUrl() {
+        let imageUrl = document.getElementById("image-url").value;
+        fetch(imageUrl)
+          .then(response => response.blob())
+          .then(blob => {
+            let reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onload = function () {
+              let base64Code = reader.result;
+              document.getElementById("base64-code").value = base64Code;
+              document.getElementById("preview-image").src = base64Code;
+            };
+          })
+          .catch(error => {
+            console.log('Error: ', error);
+          });
       }
       
       function copyToClipboard() {
