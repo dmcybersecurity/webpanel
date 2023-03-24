@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Image to Base64 Converter</title>
+  </head>
+  <body>
+    <h1>Image to Base64 Converter</h1>
+    <label for="image-upload">Upload Image:</label>
+    <input type="file" id="image-upload" accept="image/*">
+    <br>
+    <button onclick="convertImage()">Convert to Base64</button>
+    <br><br>
+    <textarea id="base64-code" rows="10" cols="50"></textarea>
+    <br>
+    <button onclick="copyToClipboard()">Copy to Clipboard</button>
+    <br><br>
+    <label for="base64-input">Base64 Code:</label>
+    <input type="text" id="base64-input">
+    <br>
+    <img id="preview-image" src="" alt="Preview Image">
+    
+    <script>
+      function convertImage() {
+        let file = document.getElementById("image-upload").files[0];
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+          let base64Code = reader.result;
+          document.getElementById("base64-code").value = base64Code;
+          document.getElementById("preview-image").src = base64Code;
+        };
+        reader.onerror = function (error) {
+          console.log('Error: ', error);
+        };
+      }
+      
+      function copyToClipboard() {
+        let base64Code = document.getElementById("base64-code");
+        base64Code.select();
+        base64Code.setSelectionRange(0, 99999);
+        document.execCommand("copy");
+        alert("Base64 code copied to clipboard!");
+      }
+      
+      function previewImage() {
+        let base64Code = document.getElementById("base64-input").value;
+        document.getElementById("preview-image").src = base64Code;
+      }
+      
+      document.getElementById("base64-input").addEventListener("input", previewImage);
+    </script>
+  </body>
+</html>
